@@ -1,0 +1,4 @@
+"0","colnames(Game_of_Thrones) <- c(""season"",""no.ep"",""no.overall"",""title"",""time"",""directed"",""written"",""air_date"",""viewer"",""music"", ""cinematography"", ""editing"", ""imdb"", ""rotten"", ""metacritic"", ""ordered"", ""duration"", ""adepted"", ""synopsis"")"
+"0","Game_of_Thrones %>%"
+"0","  select(season, no.ep, title, directed, written, viewer, music, cinematography, editing, imdb, rotten, metacritic) %>%"
+"0","  datatable()"

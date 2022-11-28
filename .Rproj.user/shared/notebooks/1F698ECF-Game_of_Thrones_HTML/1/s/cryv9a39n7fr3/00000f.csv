@@ -1,0 +1,8 @@
+"0","rotten_rating <- Game_of_Thrones %>%"
+"0","  select(season,"
+"0","         rotten) %>%"
+"0","  group_by(season) %>%"
+"0","  summarise(mean_rotten = round(mean(rotten),2))"
+"0",""
+"0","rotten_rating %>%"
+"0","  arrange(desc(mean_rotten))"

@@ -1,0 +1,31 @@
+"0","glimpse(Game_of_Thrones)"
+"1","Rows: 73"
+"1",""
+"1","
+"
+"1","Columns: 19"
+"1",""
+"1","
+"
+"1","$ Season                                [3m[38;5;246m<dbl>[39m[23m 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2,…
+$ `No. of Episode (Season)`             [3m[38;5;246m<dbl>[39m[23m 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8…
+$ `No. of Episode (Overall)`            [3m[38;5;246m<dbl>[39m[23m 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16…
+$ `Title of the Episode`                [3m[38;5;246m<chr>[39m[23m ""Winter Is Coming"", ""The Kingsroad"", ""Lord Snow"", ""Cr…
+$ `Running Time (Minutes)`              [3m[38;5;246m<dbl>[39m[23m 61, 55, 57, 55, 54, 52, 57, 58, 56, 52, 52, 53, 52, 5…
+$ `Directed by`                         [3m[38;5;246m<chr>[39m[23m ""Tim Van Patten"", ""Tim Van Patten"", ""Brian Kirk"", ""Br…
+$ `Written by`                          [3m[38;5;246m<chr>[39m[23m ""David Benioff, D. B. Weiss"", ""David Benioff, D. B. W…
+$ `Original Air Date`                   [3m[38;5;246m<chr>[39m[23m ""17-Apr-2011"", ""24-Apr-2011"", ""1-May-2011"", ""8-May-20…
+$ `U.S. Viewers (Millions)`             [3m[38;5;246m<dbl>[39m[23m 2.22, 2.20, 2.44, 2.45, 2.58, 2.44, 2.40, 2.72, 2.66,…
+$ `Music by`                            [3m[38;5;246m<chr>[39m[23m ""Ramin Djawadi"", ""Ramin Djawadi"", ""Ramin Djawadi"", ""R…
+$ `Cinematography by`                   [3m[38;5;246m<chr>[39m[23m ""Alik Sakharov"", ""Alik Sakharov"", ""Marco Pontecorvo"",…
+$ `Editing by`                          [3m[38;5;246m<chr>[39m[23m ""Oral Norrie Ottey"", ""Oral Norrie Ottey"", ""Frances Pa…
+$ `IMDb Rating`                         [3m[38;5;246m<dbl>[39m[23m 8.9, 8.6, 8.5, 8.6, 9.0, 9.1, 9.1, 8.9, 9.6, 9.4, 8.6…
+$ `Rotten Tomatoes Rating (Percentage)` [3m[38;5;246m<dbl>[39m[23m 100, 100, 81, 100, 95, 100, 100, 95, 100, 100, 100, 8…
+$ `Metacritic Ratings`                  [3m[38;5;246m<dbl>[39m[23m 9.1, 8.9, 8.7, 9.1, 9.0, 9.2, 9.4, 8.9, 9.5, 9.4, 8.9…
+$ Ordered                               [3m[38;5;246m<chr>[39m[23m ""March 2, 2010"", ""March 2, 2010"", ""March 2, 2010"", ""M…
+$ `Filming Duration`                    [3m[38;5;246m<chr>[39m[23m ""Second half of 2010"", ""Second half of 2010"", ""Second…
+$ `Novel(s) Adapted`                    [3m[38;5;246m<chr>[39m[23m ""A Game of Thrones"", ""A Game of Thrones"", ""A Game of …
+$ Synopsis                              [3m[38;5;246m<chr>[39m[23m ""North of the Seven Kingdoms of Westeros, Night's Wat…"
+"1",""
+"1","
+"

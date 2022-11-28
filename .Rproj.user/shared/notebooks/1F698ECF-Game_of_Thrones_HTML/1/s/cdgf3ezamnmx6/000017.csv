@@ -1,0 +1,4 @@
+"0","Game_of_Thrones %>%"
+"0","  select(season, no.ep, title, viewer, cinematography) %>%"
+"0","  filter(cinematography == ""Anette Haellmigk"") %>%"
+"0","  datatable()"

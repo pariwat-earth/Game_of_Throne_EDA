@@ -1,0 +1,4 @@
+"0","Game_of_Thrones %>%"
+"0","  select(season, no.ep, title, viewer, written) %>%"
+"0","  filter(written == ""David Benioff, D. B. Weiss"") %>%"
+"0","  datatable()"

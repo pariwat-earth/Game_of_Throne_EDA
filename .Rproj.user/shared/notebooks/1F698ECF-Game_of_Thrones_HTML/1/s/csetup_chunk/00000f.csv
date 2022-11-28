@@ -1,0 +1,6 @@
+"0","# load library and data"
+"0","library(tidyverse)"
+"0","library(janitor)"
+"0","library(readr)"
+"0","library(DT)"
+"0","Game_of_Thrones <- read.csv(""Game_of_Thrones.csv"")"

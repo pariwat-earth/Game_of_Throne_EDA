@@ -1,0 +1,6 @@
+"0","cinematography <- Game_of_Thrones %>%"
+"0","    select(cinematography_by) %>%"
+"0","    group_by(cinematography_by) %>%"
+"0","    count() %>%"
+"0","    arrange(desc(n)) %>%"
+"0","    filter(n >= 5)"

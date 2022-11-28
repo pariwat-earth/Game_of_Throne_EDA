@@ -1,0 +1,8 @@
+"0","imdb_rating <- Game_of_Thrones %>%"
+"0","  select(season,"
+"0","         imdb) %>%"
+"0","  group_by(season) %>%"
+"0","  summarise(mean_imdb = round(mean(imdb),2))"
+"0",""
+"0","imdb_rating %>%"
+"0","  arrange(desc(mean_imdb))"

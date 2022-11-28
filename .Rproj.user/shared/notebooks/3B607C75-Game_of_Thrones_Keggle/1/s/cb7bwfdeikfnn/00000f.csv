@@ -1,0 +1,5 @@
+"0","rating_of_tree <- Game_of_Thrones %>%"
+"0"," select(im_db_rating,rotten_tomatoes_rating_percentage,metacritic_ratings) %>%"
+"0","  summarise(mean_imdb = mean(im_db_rating), "
+"0","            mean_rottrn = mean(rotten_tomatoes_rating_percentage)/10,"
+"0","            mean_metacritic = mean(metacritic_ratings))"

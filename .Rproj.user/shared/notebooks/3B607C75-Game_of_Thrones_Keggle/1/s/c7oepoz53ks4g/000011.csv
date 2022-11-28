@@ -1,0 +1,6 @@
+"0","diredtors <- Game_of_Thrones %>%"
+"0","  select(directed_by) %>%"
+"0","  group_by(directed_by) %>%"
+"0","  count() %>%"
+"0","  arrange(desc(n)) %>%"
+"0","  filter(n >= 5)"

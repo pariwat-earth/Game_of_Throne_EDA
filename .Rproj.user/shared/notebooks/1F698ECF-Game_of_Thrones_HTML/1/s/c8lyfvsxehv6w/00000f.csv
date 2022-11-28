@@ -1,0 +1,4 @@
+"0","Game_of_Thrones %>%"
+"0","  select(season, no.ep, title, viewer, editing) %>%"
+"0","  filter(editing == ""Katie Weiland"") %>%"
+"0","  datatable()"

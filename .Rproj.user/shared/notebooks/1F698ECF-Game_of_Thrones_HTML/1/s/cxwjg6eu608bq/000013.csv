@@ -1,0 +1,4 @@
+"0","Game_of_Thrones %>%"
+"0","  select(season, no.ep, title, directed, written, viewer, music, cinematography, editing) %>%"
+"0","  filter(title == ""The Iron Throne"") %>%"
+"0","  datatable()"

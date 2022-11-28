@@ -1,0 +1,4 @@
+"0","Game_of_Thrones %>%"
+"0","  select(season, no.ep, title, viewer, directed) %>%"
+"0","  filter(directed == ""David Nutter"") %>%"
+"0","  datatable()"

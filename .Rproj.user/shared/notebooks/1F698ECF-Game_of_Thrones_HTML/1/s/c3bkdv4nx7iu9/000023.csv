@@ -1,0 +1,4 @@
+"0","Game_of_Thrones %>%"
+"0","  filter(title == ""The Iron Throne"") %>%"
+"0","  select(synopsis)%>%"
+"0","  datatable()"

@@ -1,0 +1,253 @@
+---
+title: "Game of Thrones kaggle"
+output: pdf_document
+date: "2022-11-17"
+---
+
+import library
+```{r fig.keep="none"}
+library(tidyverse)
+library(janitor)
+```
+view data
+```{r fig.keep="none"}
+  Game_of_Thrones <- read_csv("Game_of_Thrones.csv")
+```
+```{r}
+colnames(Game_of_Thrones)
+```
+```{r}
+glimpse(Game_of_Thrones)
+```
+column name contain spaces use janitor for clean
+```{r}
+Game_of_Thrones <- clean_names(Game_of_Thrones)
+colnames(Game_of_Thrones)
+```
+# question
+## 1.All average ratings compare 3 web
+```{r}
+rating_of_tree <- Game_of_Thrones %>%
+ select(im_db_rating,
+        rotten_tomatoes_rating_percentage,
+        metacritic_ratings) %>%
+  summarise(mean_imdb = mean(im_db_rating), 
+            mean_rottrn = mean(rotten_tomatoes_rating_percentage)/10,
+            mean_metacritic = mean(metacritic_ratings))
+```
+
+```{r}
+rating_of_tree
+```
+
+```{r}
+rating_of_tree %>%
+  gather() %>%
+  ggplot(aes(key,value,fill=key)) +
+  geom_col()+
+  theme_minimal()+
+  labs(title = "average all season ratings compare 3 web",
+      x = "wed site",
+      y= "rating")
+```
+# 2.Average ratings by season compare 3 web
+```{r}
+rating_of_season <- Game_of_Thrones %>%
+  select(season,
+         im_db_rating,
+         rotten_tomatoes_rating_percentage,
+         metacritic_ratings) %>%
+  group_by(season) %>%
+  summarise(mean_imdb = mean(im_db_rating), 
+            mean_rottrn = mean(rotten_tomatoes_rating_percentage)/10,
+            mean_metacritic = mean(metacritic_ratings))
+```
+
+```{r}
+rating_of_season
+```
+```{r}
+rating_of_season %>%
+  pivot_longer(-season, 
+               names_to = "variable", 
+               values_to = "value") %>%
+  ggplot(aes(season, value, colour= variable))+
+  geom_point(size=5)+
+  geom_line(alpha=0.2,size=2)+
+  theme_minimal()+
+  labs(title = "Ralationship between rating and season of 3 web site",
+      x = "season",
+      y= "rating")
+```
+season 4 is best of rating
+
+# 3.Average ratings of each episode by season4
+```{r}
+rating_of_season4 <- Game_of_Thrones %>%
+  filter(season == 4) %>%
+  select(no_of_episode_season,
+         im_db_rating,
+         rotten_tomatoes_rating_percentage,
+         metacritic_ratings) %>%
+  group_by(no_of_episode_season) %>%
+  summarise(mean_imdb = mean(im_db_rating), 
+            mean_rottrn = mean(rotten_tomatoes_rating_percentage)/10,
+            mean_metacritic = mean(metacritic_ratings))
+```
+
+```{r}
+rating_of_season4
+```
+
+
+```{r}
+rating_of_season4 %>%
+  pivot_longer(-no_of_episode_season, 
+               names_to = "variable", 
+               values_to = "value") %>%
+  ggplot(aes(no_of_episode_season, 
+             value, 
+             colour= variable))+
+  geom_point(size=4)+
+  geom_line(alpha=0.3,size=2)+
+  theme_minimal()+
+  labs(title = "Ralationship between rating and episode in season 4",
+      x = "episode",
+      y= "rating")+
+  facet_wrap(~variable,ncol=1)
+```
+# 4.Top 5 directors who have worked with the most
+```{r}
+diredtors <- Game_of_Thrones %>%
+  select(directed_by) %>%
+  group_by(directed_by) %>%
+  count() %>%
+  arrange(desc(n)) %>%
+  filter(n >= 5)
+```
+
+```{r}
+diredtors
+```
+```{r}
+diredtors %>%
+  ggplot(aes(directed_by,
+             n, 
+             label = diredtors$directed_by, 
+             fill=directed_by))+
+  geom_col()+
+  geom_text(size=3,
+            position = position_dodge(0.9), 
+            vjust=0)+
+  theme_minimal()+
+  labs(title = "Top 5 directors who have worked with the most",
+      x = "director",
+      y= "amount")+
+  theme(axis.text.x = element_blank(),
+        legend.position = "none")
+```
+David Nutter and Alan Taylor is worked with the most
+
+# 5.Which episodes are the top 5 directors taking care of?
+### David Nutter
+```{r}
+Game_of_Thrones %>%
+  filter(directed_by == 'David Nutter') %>%
+  select(1,2,4,5,6,7,8,9,11,12,13,14,15,19)
+```
+
+### Alan Taylor
+```{r}
+Game_of_Thrones %>%
+  filter(directed_by == 'Alan Taylor') %>%
+  select(1,2,4,5,6,7,8,9,11,12,13,14,15,19)
+```
+# 6.Top 5 most viewed people
+```{r}
+top_5_viewed <- Game_of_Thrones %>%
+  select(1,2,4,9) %>%
+  arrange(desc(u_s_viewers_millions)) %>%
+  head(5)
+```
+
+```{r}
+top_5_viewed
+```
+season 8 ep6 and ep5 is popular
+
+```{r}
+top_5_viewed %>%
+  ggplot(aes(title_of_the_episode,
+             u_s_viewers_millions, 
+             label = title_of_the_episode, 
+             fill=title_of_the_episode))+
+  geom_col()+
+  geom_text(size=3,
+            position = position_dodge(0.9), 
+            vjust=0)+
+  theme_minimal()+
+  labs(title = "Top 5 most viewed people",
+      x = "episode",
+      y= "view")+
+  theme(axis.text.x = element_blank(),
+        legend.position = "none")
+```
+
+# 7.The top 5 cinematography who has worked together the most
+```{r}
+cinematography <- Game_of_Thrones %>%
+    select(cinematography_by) %>%
+    group_by(cinematography_by) %>%
+    count() %>%
+    arrange(desc(n)) %>%
+    filter(n >= 5)
+```
+
+```{r}
+cinematography
+```
+Anette Haellmigk and Jonathan Freeman
+```{r}
+cinematography %>%
+  ggplot(aes(cinematography_by,
+             n, 
+             label = cinematography_by, 
+             fill=cinematography_by))+
+  geom_col()+
+  geom_text(size=3,
+            position = position_dodge(0.9), 
+            vjust=0)+
+  theme_minimal()+
+  labs(title = "The top 5 cinematography who has worked together the most",
+      x = "cinematography",
+      y= "amount")+
+  theme(axis.text.x = element_blank(),
+        legend.position = "none")
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

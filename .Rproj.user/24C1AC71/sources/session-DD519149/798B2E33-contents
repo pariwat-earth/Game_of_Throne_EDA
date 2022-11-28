@@ -1,0 +1,575 @@
+---
+output: 
+  html_document:
+    number_sections: true
+    fig_caption: true
+    toc: true
+    fig_width: 7
+    fig_height: 4.5
+    theme: cosmo
+    highlight: tango
+    code_folding: hide
+---
+
+```{r setup, include=FALSE , echo=FALSE}
+# load library and data
+library(tidyverse)
+library(janitor)
+library(readr)
+library(DT)
+Game_of_Thrones <- read.csv("Game_of_Thrones.csv")
+```
+
+# ⭐ About Game of Thrones
+Game of Thrones is an American fantasy drama television series created by David Benioff and D. B. Weiss for HBO. It is an adaptation of A Song of Ice and Fire, a series of fantasy novels by George R. R. Martin, the first of which is A Game of Thrones. It premiered on HBO in the United States on April 17, 2011, and concluded on May 19, 2019, with 73 episodes broadcast over eight seasons.
+
+In this project we will utilize EDA to explore the Game of thrones dataset for:
+
+1. **Which season has the highest ratings?**
+
+2. **Top 5 most viewed**
+
+3. **Top 5 people who work with the most**
+
+<img src="https://www.guidingtech.com/wp-content/uploads/276305-thewallpaper_4d470f76dc99e18ad75087b1b8410ea9.jpg"  width="960" length="540" align="center">
+
+
+**Game of Thrones Dataset**
+
+```{r}
+colnames(Game_of_Thrones) <- c("season","no.ep","no.overall","title","time","directed","written","air_date","viewer","music", "cinematography", "editing", "imdb", "rotten", "metacritic", "ordered", "duration", "adepted", "synopsis")
+Game_of_Thrones %>%
+  select(season, no.ep, title, directed, written, viewer, music, cinematography, editing, imdb, rotten, metacritic) %>%
+  datatable()
+```
+
+## Game of Thrones rating {.tabset .tabset-fade .tabset-pills}
+We will see Which season has the highest ratings compare 3 web
+
+```{r}
+rating_of_tree <- Game_of_Thrones %>%
+ select(imdb,
+        metacritic,
+        rotten) %>%
+  summarise(mean_imdb = round(mean(imdb),2), 
+            mean_metacritic = round(mean(metacritic),2),
+            mean_rottrn = round(mean(rotten)/10,2))
+
+colnames(rating_of_tree) <- c("IMDB","Metacritic","Rotten Tomatoes")
+rating_of_tree
+```
+
+```{r}
+rating_of_tree %>%
+  gather() %>%
+  ggplot(aes(key,
+             value,
+             fill=key,
+             label = gather(rating_of_tree)$key)) +
+  geom_col()+
+  geom_text(size=5,
+            position = position_dodge(0.9), 
+            vjust=0)+
+  theme_minimal()+
+  theme(axis.text.x = element_blank(),
+        legend.position = "none")+
+  xlab("")+
+  ylab("")+
+  scale_fill_manual(values = c("#FFD700","#191970","#FF6347"))
+```
+
+### IMDB ratings
+
+<center>
+<img src="https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg" width="200" length="200"> 
+</center>
+
+in imdb website we will see season 4 have most rating 
+
+```{r}
+imdb_rating <- Game_of_Thrones %>%
+  select(season,
+         imdb) %>%
+  group_by(season) %>%
+  summarise(mean_imdb = round(mean(imdb),2))
+
+imdb_rating %>%
+  pivot_longer(-season, 
+               names_to = "variable", 
+               values_to = "value") %>%
+  ggplot(aes(season, value))+
+  geom_point(size=5, colour = "#FFD700")+
+  geom_line(alpha=0.2,size=2,colour = "#FFD700")+
+  theme_minimal()+
+  theme(axis.text.x = element_text(angle = 0, hjust = 1, size = rel(1.5)),
+        axis.text.y = element_blank(),
+        legend.position = "none",
+        plot.title = element_text(hjust = 0.5, size = rel(2)))+
+  scale_x_continuous(breaks = 1:8)+
+  ggtitle("IMDB")+
+  xlab("")+
+  ylab("")
+```
+
+```{r}
+imdb_rating %>%
+  arrange(desc(mean_imdb))
+```
+
+### Metacritic ratings
+
+<center>
+<img src="https://www.metacritic.com/images/icons/metacritic-icon.svg" width="150" length="150">
+</center>
+
+in Metacritic website we will see season 1 have most rating 
+
+```{r}
+rotten_rating <- Game_of_Thrones %>%
+  select(season,
+         metacritic) %>%
+  group_by(season) %>%
+  summarise(mean_metacritic = round(mean(metacritic),2))
+
+rotten_rating %>%
+  pivot_longer(-season, 
+               names_to = "variable", 
+               values_to = "value") %>%
+  ggplot(aes(season, value))+
+  geom_point(size=5, colour = "#191970")+
+  geom_line(alpha=0.2,size=2,colour = "#191970")+
+  theme_minimal()+
+  theme(axis.text.x = element_text(angle = 0, hjust = 1, size = rel(1.5)),
+        axis.text.y = element_blank(),
+        legend.position = "none",
+        plot.title = element_text(hjust = 0.5, size = rel(2)))+
+  scale_x_continuous(breaks = 1:8)+
+  ggtitle("Metacritic")+
+  xlab("")+
+  ylab("")
+```
+
+```{r}
+rotten_rating %>%
+  arrange(desc(mean_metacritic))
+```
+
+### Rotten Tomato ratings
+
+<center>
+<img src="https://www.rottentomatoes.com/assets/pizza-pie/head-assets/images/RT_TwitterCard_2018.jpg" width="200" length="200"> 
+</center>
+
+in Rotten Tomato website we will see season 1 have most rating 
+
+```{r}
+rotten_rating <- Game_of_Thrones %>%
+  select(season,
+         rotten) %>%
+  group_by(season) %>%
+  summarise(mean_rotten = round(mean(rotten),2))
+
+rotten_rating %>%
+  pivot_longer(-season, 
+               names_to = "variable", 
+               values_to = "value") %>%
+  ggplot(aes(season, value))+
+  geom_point(size=5, colour = "#FF6347")+
+  geom_line(alpha=0.2,size=2,colour = "#FF6347")+
+  theme_minimal()+
+  theme(axis.text.x = element_text(angle = 0, hjust = 1, size = rel(1.5)),
+        axis.text.y = element_blank(),
+        legend.position = "none",
+        plot.title = element_text(hjust = 0.5, size = rel(2)))+
+  scale_x_continuous(breaks = 1:8)+
+  ggtitle("Rotten Tomoto")+
+  xlab("")+
+  ylab("")
+```
+
+```{r}
+rotten_rating %>%
+  arrange(desc(mean_rotten))
+```
+
+## summarize compare 3 website top rating {.tabset .tabset-fade .tabset-pills}
+
+**IMDB is 4**
+
+**Metacritic is 1**
+
+**Rotten Tomoto is 1**
+
+**season 1 win 2:1**
+<img src="https://flxt.tmsimg.com/assets/p8681514_b1t_h10_aa.jpg"  width="960" length="540" align="center">
+
+**season 1 overiew**
+```{r}
+Game_of_Thrones %>%
+  select(season, no.ep, title, directed, written, viewer, music, cinematography, editing) %>%
+  filter(season == 1) %>%
+  datatable()
+```
+
+```{r}
+rating_of_season1 <- Game_of_Thrones %>%
+  filter(season == 1) %>%
+  select(no.ep,
+         imdb,
+         rotten,
+         metacritic) %>%
+  group_by(no.ep) %>%
+  summarise(mean_imdb = round(mean(imdb),2), 
+            mean_rottrn = round(mean(rotten)/10,2),
+            mean_metacritic = round(mean(metacritic),2))
+
+rating_of_season1
+```
+### IMDB ratings
+
+ep 9 is most rating 9.6 score 
+
+```{r}
+rating_of_season1 %>%
+  select(no.ep, mean_imdb) %>%
+  pivot_longer(-no.ep, 
+               names_to = "variable", 
+               values_to = "value")%>%
+  ggplot(aes(no.ep, 
+             value, 
+             colour= variable))+
+  geom_point(size=4, colour = "#FFD700")+
+  geom_line(alpha=0.3,size=2, colour = "#FFD700")+
+  theme_minimal()+
+  labs(title = "Ralationship between rating and episode in season 1",
+      x = "episode",
+      y= "rating")+
+  scale_x_continuous(breaks = 1:10)
+```
+<img src="https://dwesterberg.files.wordpress.com/2013/03/0-baelor-ned-beheaded.png"  width="960" length="540" align="center">
+
+### Metacritic ratings
+ep 9 is most rating 9.5 score 
+
+```{r}
+rating_of_season1 %>%
+  select(no.ep, mean_metacritic) %>%
+  pivot_longer(-no.ep, 
+               names_to = "variable", 
+               values_to = "value")%>%
+  ggplot(aes(no.ep, 
+             value, 
+             colour= variable))+
+  geom_point(size=4, colour = "#191970")+
+  geom_line(alpha=0.3,size=2, colour = "#191970")+
+  theme_minimal()+
+  labs(title = "Ralationship between rating and episode in season 1",
+      x = "episode",
+      y= "rating")+
+  scale_x_continuous(breaks = 1:10)
+```
+<img src="https://jackandthegeekstalk.files.wordpress.com/2017/08/maxresdefault-7.jpg"  width="960" length="540" align="center">
+
+### Rotten Tomato ratings
+ep 1,2,4,6,7,9,10 😂 is most rating 100 score 
+
+```{r}
+rating_of_season1 %>%
+  select(no.ep, mean_rottrn) %>%
+  pivot_longer(-no.ep, 
+               names_to = "variable", 
+               values_to = "value")%>%
+  ggplot(aes(no.ep, 
+             value, 
+             colour= variable))+
+  geom_point(size=4, colour = "#FF6347")+
+  geom_line(alpha=0.3,size=2, colour = "#FF6347")+
+  theme_minimal()+
+  labs(title = "Ralationship between rating and episode in season 1",
+      x = "episode",
+      y= "rating")+
+  scale_x_continuous(breaks = 1:10)
+```
+
+<img src="https://statcdn.fandango.com/MPX/image/NBCU_Fandango/961/647/thumb_74FCE88E-D88F-45E9-8CD5-7829E3FC78F1.jpg"  width="960" length="540" align="center">
+**Whattttttttt!!!!!!!!!!!**
+
+## Who is director and wirttor
+
+In season 1 ep. 9 
+
+directed by ***Alan Taylor***
+
+written by ***David Benioff, D. B. Weiss***
+
+cinematography by ***Alik Sakharov***
+
+editing by ***Frances Parker***
+
+```{r}
+Game_of_Thrones %>%
+  select(season, no.ep, title, directed, written, viewer, music, cinematography, editing) %>%
+  filter(season == 1, no.ep == 9) %>%
+  datatable()
+```
+
+
+# 😎 Top 5 most viewed
+We will plot a simple bar plot with No of U.S. Viewers of the Episode in Millions
+
+```{r}
+top_5_viewed <- Game_of_Thrones %>%
+  select(1,2,4,9) %>%
+  arrange(desc(viewer)) %>%
+  head(5)
+```
+
+```{r}
+top_5_viewed %>%
+  ggplot(aes(title,
+             viewer,
+             label = title,
+             fill=title))+
+  geom_col()+
+  geom_text(size=3,
+            position = position_dodge(0.9), 
+            vjust=0)+
+  theme_minimal()+
+  labs(title = "Top 5 most viewed people",
+      x = "episode",
+      y= "view")+
+  theme(axis.text.x = element_blank(),
+        legend.position = "none")
+```
+
+**The Iron Throne WIN!!!**
+
+<img src="https://m.media-amazon.com/images/M/MV5BNGI0NzNiZjItZDMyMS00ODZjLWIxZDAtNDc5ZGQ0NzQ0ZDAzXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg"  width="960" length="540" align="center">
+
+```{r}
+Game_of_Thrones %>%
+  filter(title == "The Iron Throne") %>%
+  select(synopsis)%>%
+  datatable()
+
+```
+
+## Who is director and wirttor
+
+In season 8 ep. 6 The Iron Throne 
+
+directed by ***David Benioff & D. B. Weiss***
+
+written by ***David Benioff, D. B. Weiss***
+
+cinematography by ***Jonathan Freeman***
+
+editing by ***Katie Weiland***
+
+```{r}
+Game_of_Thrones %>%
+  select(season, no.ep, title, directed, written, viewer, music, cinematography, editing) %>%
+  filter(title == "The Iron Throne") %>%
+  datatable()
+```
+
+
+# 🤩 Top 5 people who work with the most {.tabset .tabset-fade .tabset-pills}
+In Game of Throne dataset we have position director, writtor, cinematographer, editor let see top 5 people who work with the most
+
+## director
+
+```{r}
+diredtors <- Game_of_Thrones %>%
+  select(directed) %>%
+  group_by(directed) %>%
+  count() %>%
+  arrange(desc(n)) %>%
+  filter(n >= 5) %>%
+  head(5)
+
+colnames(diredtors) <- c("directed", "amount")
+datatable(diredtors)
+```
+
+
+```{r}
+diredtors %>%
+  ggplot(aes(directed,
+             amount, 
+             label = diredtors$directed, 
+             fill=directed))+
+  geom_col()+
+  geom_text(size=3,
+            position = position_dodge(0.9), 
+            vjust=0)+
+  theme_minimal()+
+  labs(title = "Top 5 directors who have worked with the most",
+      x = "director",
+      y= "amount")+
+  theme(axis.text.x = element_blank(),
+        legend.position = "none")
+```
+
+The most directing is David Nutter
+
+<img src="https://m.media-amazon.com/images/M/MV5BMjI4MDIyMDI5NF5BMl5BanBnXkFtZTgwNjE0ODQ4NjE@._V1_.jpg"  width="300" align="center">
+
+
+let's see what episode directed by David Nutter
+
+```{r}
+Game_of_Thrones %>%
+  select(season, no.ep, title, viewer, directed) %>%
+  filter(directed == "David Nutter") %>%
+  datatable()
+```
+
+
+## writtor
+
+```{r}
+writtor <- Game_of_Thrones %>%
+  select(written) %>%
+  group_by(written) %>%
+  count() %>%
+  arrange(desc(n)) %>%
+  head(5)
+
+colnames(writtor) <- c("writter", "amount")
+datatable(writtor)
+```
+
+```{r}
+writtor %>%
+  ggplot(aes(writter,
+             amount, 
+             label = writtor$writter, 
+             fill=writter))+
+  geom_col()+
+  geom_text(size=3,
+            position = position_dodge(0.9), 
+            vjust=0)+
+  theme_minimal()+
+  labs(title = "Top 5 writtor who have worked with the most",
+      x = "writtor",
+      y= "amount")+
+  theme(axis.text.x = element_blank(),
+        legend.position = "none")
+```
+
+The most writer is David Benioff, D. B. Weiss 
+
+<img src="https://www.indiewire.com/wp-content/uploads/2019/05/Screen-Shot-2019-05-30-at-10.02.26-AM.png"  width="300"  align="center">
+
+let's see what episode written by David Benioff, D. B. Weiss
+
+```{r}
+Game_of_Thrones %>%
+  select(season, no.ep, title, viewer, written) %>%
+  filter(written == "David Benioff, D. B. Weiss") %>%
+  datatable()
+```
+
+## cinematographer
+
+```{r}
+cinematographer <- Game_of_Thrones %>%
+  select(cinematography) %>%
+  group_by(cinematography) %>%
+  count() %>%
+  arrange(desc(n)) %>%
+  head(5)
+
+colnames(cinematographer) <- c("cinematography", "amount")
+datatable(cinematographer)
+```
+
+```{r}
+cinematographer %>%
+  ggplot(aes(cinematography,
+             amount, 
+             label = cinematographer$cinematography, 
+             fill=cinematography))+
+  geom_col()+
+  geom_text(size=3,
+            position = position_dodge(0.9), 
+            vjust=0)+
+  theme_minimal()+
+  labs(title = "Top 5 writtor who have worked with the most",
+      x = "writtor",
+      y= "amount")+
+  theme(axis.text.x = element_blank(),
+        legend.position = "none")
+```
+
+The most cinematographer is Anette Haellmigk
+
+<img src="https://m.media-amazon.com/images/M/MV5BNTYwMTNiMDMtNjc3Zi00Zjc5LWJiYzQtNzQyYTU3MTVmNDI2XkEyXkFqcGdeQXVyMjE5MzM3MjA@._V1_.jpg"  width="300" align="center">
+
+let's see what episode cinematography by Anette Haellmigk
+
+```{r}
+Game_of_Thrones %>%
+  select(season, no.ep, title, viewer, cinematography) %>%
+  filter(cinematography == "Anette Haellmigk") %>%
+  datatable()
+```
+
+## editor
+```{r}
+editor <- Game_of_Thrones %>%
+  select(editing) %>%
+  group_by(editing) %>%
+  count() %>%
+  arrange(desc(n)) %>%
+  head(5)
+
+colnames(editor) <- c("editing", "amount")
+datatable(editor)
+```
+
+```{r}
+editor %>%
+  ggplot(aes(editing,
+             amount, 
+             label = editor$editing, 
+             fill=editing))+
+  geom_col()+
+  geom_text(size=3,
+            position = position_dodge(0.9), 
+            vjust=0)+
+  theme_minimal()+
+  labs(title = "Top 5 writtor who have worked with the most",
+      x = "writtor",
+      y= "amount")+
+  theme(axis.text.x = element_blank(),
+        legend.position = "none")
+```
+
+The most editing is Katie Weiland
+
+<img src="https://m.media-amazon.com/images/M/MV5BMTUyNjk2NzY5OF5BMl5BanBnXkFtZTgwNTE1NTg3NjE@._V1_.jpg"  width="300" align="center">
+
+let's see what episodeediting by Katie Weiland
+
+```{r}
+Game_of_Thrones %>%
+  select(season, no.ep, title, viewer, editing) %>%
+  filter(editing == "Katie Weiland") %>%
+  datatable()
+```
+
+
+# 🚩 Summary
+This notebook showed that Game of Throne season 1 ep.9 ***Baelor*** is most rating directed***Alan Taylor*** by and writter by***David Benioff, D. B. Weiss*** most of viewer is The Iron Throne directed and writer by***David Benioff & D. B. Weiss*** Next time when I want to watch cinematic , I will try the cinematic directed and writer by ***David Benioff, D. B. Weiss***
+
+# 🪑 Reference:
+[1] https://www.kaggle.com/datasets/iamsouravbanerjee/game-of-thrones-dataset
+
+**Thanks for reading ! **
+
+
+<img src="https://static.hbo.com/content/dam/hbodata/series/game-of-thrones/video-stills/season-01/game-of-thrones-season-1-episode-1-full-stitched-607175_PRO35_10-1920.jpg"  width="960" length="540" align="center">
+
+

@@ -1,0 +1,4 @@
+"0","top_5_viewed <- Game_of_Thrones %>%"
+"0","  select(1,2,4,9) %>%"
+"0","  arrange(desc(u_s_viewers_millions)) %>%"
+"0","  head(5)"
